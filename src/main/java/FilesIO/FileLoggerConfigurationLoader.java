@@ -1,39 +1,38 @@
 package FilesIO;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.*;
+import java.util.Properties;
 
 public class FileLoggerConfigurationLoader {
-
-
     public FileLoggerConfiguration load() {
-        File ConfigFile = new File("D:\\JAVA\\HW9", "ConfigFile.txt"); // define file
-        String[] dataForConf = new String[4]; //array for configuration data
+        FileInputStream fis;
+        Properties proper = new Properties();
+        FileLoggerConfiguration fileLogConf = new FileLoggerConfiguration();
+
         try {
-            FileReader fileReader = new FileReader(ConfigFile); //make fileReader
-            BufferedReader bufferedReader = new BufferedReader(fileReader); //put fileReader into buffer reader
-//---------------------------------------------------------------------------------------------------------
-            String s; // variable for data from file
-            for (int i = 0; i < 4; i++) {
-                s = bufferedReader.readLine();
-                if (s != null) {
-                    dataForConf[i] = s.substring(s.lastIndexOf(" ")).trim();
-                } else {
-                    break;
-                }
-            }
-        } catch (
-                Exception e) {
-            throw new RuntimeException(e);
+            fis = new FileInputStream("D:\\JAVA\\HW9\\ConfigFile.txt");
+            proper.load(fis);
+            String file =  proper.getProperty("FILE");
+            String level =  proper.getProperty("LEVEL");
+            String format =  proper.getProperty("FORMAT");
+            String maxSize =  proper.getProperty("MAX-SIZE");
+
+            fileLogConf.setFileName(file);
+            fileLogConf.setLogLevel(level);
+            fileLogConf.setMaxSizeFile(Integer.parseInt(maxSize));
+            fileLogConf.setFormat(format);
+
+            System.out.println("FILE: " + file
+                    + ", LEVEL: " + level
+                    + ", FORMAT: " + format
+                    + ", MAX-SIZE" + maxSize);
+
+        } catch (IOException e) {
+            System.err.println("ОШИБКА: Файл свойств отсуствует!");
+
         }
-        //--------------------------------------------------------------------
-        FilesIO.FileLoggerConfiguration fileLogConf = new FilesIO.FileLoggerConfiguration();
-        fileLogConf.setFileName(dataForConf[0]);
-        fileLogConf.setLogLevel(dataForConf[1]);
-        fileLogConf.setMaxSizeFile(Integer.parseInt(dataForConf[2]));
-        fileLogConf.setFormat(dataForConf[3]);
         return fileLogConf;
     }
 }
+
+

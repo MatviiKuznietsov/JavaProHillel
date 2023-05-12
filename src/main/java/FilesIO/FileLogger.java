@@ -6,10 +6,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static org.slf4j.LoggerFactory.getLogger;
 
-
-public class FileLogger extends Logger{
+public class FileLogger extends Logger {
 
     public FileLoggerConfiguration getFileConf() {
         return fileConf;
@@ -44,9 +42,9 @@ public class FileLogger extends Logger{
         int newFileCounter = 1;
         for (int i = 0; i < newFileCounter; i++) {
             try (FileWriter fileWriter = new FileWriter("Log_" + dateTime + newFileCounter + fileConf.getFileName(), true);) { //input text to file
+                checkSizeFile(newFileCounter);
                 fileWriter.write(String.format(fileConf.getFormat(), String.valueOf(LocalDateTime.now()), fileConf.getLogLevel(), notification)); //
                 fileWriter.flush();
-                checkSizeFile(newFileCounter);
             } catch (FileMaxSizeReachedException e) {
                 newFileCounter++;
                 System.out.println("File is overloaded. Need one more");
