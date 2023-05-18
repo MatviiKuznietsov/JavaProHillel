@@ -8,13 +8,13 @@ public class AppList {
         Random random = new Random();
 
         Runnable addElements = () -> {
-            threadSafeList.add(random);
+            threadSafeList.add(random.nextInt(10));
         };
         Runnable getElements = () -> {
-            threadSafeList.get(random);
+            threadSafeList.get(random.nextInt(10));
         };
         Runnable removeElement = () -> {
-            threadSafeList.remove(random);
+            threadSafeList.remove(random.nextInt(10));
         };
 
         Thread addThread = new Thread(addElements);

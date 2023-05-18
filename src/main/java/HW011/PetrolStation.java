@@ -1,5 +1,7 @@
 package HW011;
 
+import java.util.concurrent.Semaphore;
+
 public class PetrolStation {
     public double getStartAmount() {
         return startAmount;
@@ -48,14 +50,17 @@ public class PetrolStation {
         this.startAmount = amount;
     }
 
-    public double doRefuel(double amountBye) throws InterruptedException {
-
+    Semaphore semaphore = new Semaphore(2, true);
+    public    double doRefuel(double amountBye) throws InterruptedException {
+        semaphore.acquire();
         for (int i = 0; i < amountBye; i++) {
             Thread.sleep(30);
             System.out.print("|");
         }
         setEndAmount(getStartAmountAmount() - amountBye);
+        semaphore.release();
         return getEndAmount();
+
     }
 
 
