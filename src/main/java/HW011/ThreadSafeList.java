@@ -16,22 +16,22 @@ public class ThreadSafeList {
         random = new Random();
     }
 
-    public synchronized void add(Random random) {
+    public synchronized void add(Integer val) {
         for (int i = 0; i < countElements; i++) {
-            arrayList.add(random.nextInt(10) );
+            arrayList.add(val);
         }
         System.out.println("Content of list = " + arrayList);
     }
 
-    public synchronized Integer get(Random random) {
-        int index = random.nextInt(countElements);
-        int element = arrayList.get(index);
-        System.out.println("\nGet Element with index " + index + " = " + element);
+    public synchronized Integer get(Integer val) {
+        //int index = random.nextInt(countElements);
+        int element = arrayList.get(val);
+        System.out.println("\nGet Element with index " + val + " = " + element);
         return element;
     }
 
-    public synchronized void remove(Random random) {
-        int index = arrayList.remove(random.nextInt(100));
-        System.out.printf("%s - %d %s %d %s", "Element", arrayList.get(index), "with index", index, "was remove");
+    public synchronized void remove(Integer val) {
+        arrayList.remove(random.nextInt(100));
+        System.out.printf("%s - %d %s %d %s", "Element", arrayList.get(val), "with index", val, "was remove");
     }
 }

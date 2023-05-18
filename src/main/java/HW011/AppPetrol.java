@@ -5,7 +5,6 @@ import java.util.concurrent.Semaphore;
 
 public class AppPetrol {
     public static void main(String[] args) {
-        Semaphore semaphore = new Semaphore(3, true);
 
         Random random = new Random();
         PetrolStation petrolStation = new PetrolStation();
@@ -15,7 +14,7 @@ public class AppPetrol {
         Runnable getFuel = () -> {
             long timeStart = System.currentTimeMillis();
             try {
-                semaphore.acquire();
+
                 double fuel = petrolStation.doRefuel(100); //random.nextInt(1000)
                 petrolStation.setStartAmount(fuel);
                 System.out.println("\nit`s remain " + fuel + "l left ");
@@ -31,7 +30,6 @@ public class AppPetrol {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            semaphore.release();
         };
 
         for (int i = 0; i < petrolStation.getQuantityRequest(); i++) {
