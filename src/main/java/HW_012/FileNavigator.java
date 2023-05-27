@@ -1,95 +1,80 @@
 package HW_012;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class FileNavigator {
-    private FileData filesData; // Object file
+    private Map<String, List<FileData>> filesListMap = new HashMap<>();
+    private List<FileData> fileDataList;
+    private FileData fileData;
 
-    private List<FileData> fileDataList = new ArrayList<>(); // List of Objects Files
+    private String pathKey = "path\\to\\file";
 
-    //--------------------------------------------------------------------
-    private String path1 = "D:\\JAVA\\HW_013\\Files\\Folder_01";
-    private String path2 = "D:\\JAVA\\HW_013\\Files\\Folder_02";
-    private String path3 = "D:\\JAVA\\HW_013\\Files\\Folder_03";
-
-
-    public String getPath1() {
-        return path1;
-    }
-
-    public String getPath2() {
-        return path2;
-    }
-
-    public String getPath3() {
-        return path3;
-    }
-
-    //--------------------------------------------------------------------
-    public List<FileData> add(String path) throws IOException {
-        if (path.contains(path1) || path.contains(path2) || path.contains(path3)) {
-            System.out.println("Path consist " + path);
+    public void add(String path) {
+        if (path.contains(pathKey)) {
+            System.out.println("Path ok");
+            fileDataList = new ArrayList<>();
+            File file = new File(path).getAbsoluteFile();
+            File[] listFiles = file.listFiles();
+            for (File data : listFiles) {  //Check if it directory
+                if (data.isDirectory()) {
+                } else {
+                    fileData = new FileData(data.getName(), data.getPath(), data.length());
+                    fileDataList.add(fileData);
+                }
+            }
+            filesListMap.put(path, fileDataList);
         } else {
-            System.out.println("Path doesn`t consist " + path);
+            System.out.println("Path denied");
         }
-        File file = new File(path);
-        file.createNewFile();  // Make file
-        filesData = new FileData(file.getName(), file.length(), file.getParent()); // fill files attribute
-        fileDataList.add(filesData);
-        return fileDataList;
     }
 
-    public List<FileData> find(String path) {
-        List<FileData> filesOnCertanPath = new ArrayList<>();
-        for (FileData file : fileDataList) {
-            if (file.getPathToFile().equals(path)) {
-                System.out.println("Path has found -> " + file.getNameFile());
-                filesOnCertanPath.add(file);
+    public void find(String path) {
+        List<FileData> listFileInFolder = new ArrayList<>();
+        File file = new File(path).getAbsoluteFile();
+        File[] listFiles = file.listFiles();
+        for (File data : listFiles) {
+            if (data.isDirectory()) {
+                System.out.println("This is folder - " + data.getName());
+            } else {
+                System.out.println("This is file - " + data.getName());
+                listFileInFolder.add(new FileData(data.getName(), data.getPath(), data.length()));
             }
         }
-        return filesOnCertanPath;
+        for (FileData fileData1 : listFileInFolder) {
+            System.out.println(fileData1.getPath() + " -> [" + fileData1.getName() + "}");
+        }
     }
 
-    public List<FileData> filterBySize(double size) {
-        List<FileData> filesWithSomeSize = new ArrayList<>();
-        for (FileData file : fileDataList) {
-            if (file.getSizeFile() < size) {
-                System.out.println(file.getNameFile() + " With size - " + file.getSizeFile());
-                filesWithSomeSize.add(file);
+    public void fileNavigator(long size) {
+        for (FileData fileData1 : fileDataList) {
+            if (fileData1.getSize() < size) {
+                System.out.println("File " + fileData1.getName() + " < " + size + "b " + fileData1.getSize());
             }
         }
-        return filesWithSomeSize;
     }
 
     public void remove(String path) {
-        List<Integer> listToRemove = new ArrayList<>();
-        for (FileData file : fileDataList) {
-            if (file.getPathToFile().equals(path)) {
-                listToRemove.add(fileDataList.indexOf(file));
-                System.out.println("Remove " + file.getNameFile());
-            }
-        }
-
-        for (int index : listToRemove) {
-            File fileToRemove = new File(fileDataList.get(index).getPathToFile() + "\\" + fileDataList.get(index).getNameFile());
-            fileToRemove.delete();
-            fileDataList.remove(index);
-        }
+        filesListMap.remove(path);
     }
 
     public void sortBySize() {
         fileDataList.sort(new Comparator<FileData>() {
             @Override
             public int compare(FileData o1, FileData o2) {
-                if (o1.getSizeFile() == o2.getSizeFile()) return 0;
-                else if (o1.getSizeFile() > o2.getSizeFile()) return 1;
+                if (o1.getSize() == o2.getSize()) return 0;
+                else if (o1.getSize() > o2.getSize()) return 1;
                 else return -1;
             }
         });
         for (FileData fileData : fileDataList) {
-            System.out.println("File size " + fileData.getSizeFile());
+            System.out.println("File size " + fileData.getSize());
+        }
+    }
+
+    public void viewfilesListMap() {
+        for (Map.Entry entry : filesListMap.entrySet()) {
+            System.out.println(entry.getKey() + " - > " + entry.getValue());
         }
     }
 }
