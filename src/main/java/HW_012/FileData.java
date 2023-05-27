@@ -1,39 +1,42 @@
 package HW_012;
 
 public class FileData {
-    private String nameFile;
-    private double sizeFile;
+    private String name;
+    private String path;
+    private long size;
 
-    private String pathToFile;
-    public FileData(String nameFile, double sizeFile, String pathToFile){
-        setNameFile(nameFile);
-        setSizeFile(sizeFile);
-        setPathToFile(pathToFile);
+    public FileData(String name, String path, long size) {
+        this.name = name;
+        this.path = path;
+        this.size = size;
     }
 
-    public String getNameFile() {
-        return nameFile;
+    public String getName() {
+        return name;
     }
 
-    public void setNameFile(String nameFile) {
-        this.nameFile = nameFile;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public double getSizeFile() {
-        return sizeFile;
+    public String getPath() {
+        return path;
     }
 
-    public void setSizeFile(double sizeFile) {
-        this.sizeFile = sizeFile;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    public String getPathToFile() {
-        return pathToFile;
+    public long getSize() {
+        return size;
     }
 
-    public void setPathToFile(String pathToFile) {
-        this.pathToFile = pathToFile;
+    public void setSize(long size) {
+        this.size = size;
     }
 
-
+    @Override
+    public String toString() {
+        return name ;
+    }
 }
