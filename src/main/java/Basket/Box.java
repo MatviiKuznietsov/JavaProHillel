@@ -19,13 +19,15 @@ public class Box<T extends Fruit> {
         this.commonWeight = commonWeight;
     }
 
-    public void compare(Box box1) {
+    public boolean compare(Box<? extends Fruit> box1) {
         ComparatorHouse comparatorHouse = new ComparatorHouse();
         int result = comparatorHouse.compare(box1, Box.this);
         if (result == 0) {
             System.out.println("Box equals");
+            return true;
         } else {
             System.out.println("Box isn`t equals");
+            return false;
         }
     }
 
