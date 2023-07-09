@@ -10,4 +10,5 @@ public class Lesson {
     private String name1;
     private Date updatedAt;
     private Integer homework_id;
+    private Homework homework;
 }
