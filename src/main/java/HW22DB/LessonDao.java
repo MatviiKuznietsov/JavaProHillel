@@ -3,7 +3,6 @@ package HW22DB;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class LessonDao {
     private final Connection connection;
@@ -12,7 +11,7 @@ public class LessonDao {
         this.connection = connection;
     }
 
-    public void addLesson(Lesson lesson)  {
+    public void addLesson(Lesson lesson) {
         // INSERT INTO lesson (name1, updateAT )
         // VALUES ("mathPro", "2023-01-23" );
         try {
@@ -24,14 +23,14 @@ public class LessonDao {
             int rows = statement.executeUpdate();
 
             if (rows == 0) {
-                throw new CustomerCreateException("Unable to create customer");
+                throw new LessonCreateException("Unable to create lesson");
             }
             ResultSet generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 lesson.setId(generatedKeys.getInt(1));
             }
 
-        } catch (SQLException | CustomerCreateException e) {
+        } catch (SQLException | LessonCreateException e) {
             throw new RuntimeException(e);
         }
     }
@@ -69,50 +68,26 @@ public class LessonDao {
         return lessons;
     }
 
-    public List<Object> showLessonByID(Integer id) {
+    public Lesson showLessonByID(Integer id) {
         try {
             PreparedStatement statement = connection.prepareStatement("select * from lesson Left join homework on lesson.id= homework.id where lesson.id=?");
             statement.setInt(1, id);
             boolean dateReturned = statement.execute();
             if (dateReturned) {
                 ResultSet resultSet = statement.getResultSet();
-                List<Object> objects = new ArrayList<>();
                 while (resultSet.next()) {
                     Lesson lesson = new Lesson();
                     lesson.setId(resultSet.getInt("id"));
                     lesson.setName1(resultSet.getString("name1"));
                     lesson.setUpdatedAt(resultSet.getDate("updateAT"));
                     lesson.setHomework_id(resultSet.getInt("homework_id"));
+
                     Homework homework = new Homework();
                     homework.setId(resultSet.getInt("id"));
                     homework.setName1(resultSet.getString("name1"));
                     homework.setDescription(resultSet.getString("description"));
-                    objects.add(lesson);
-                    objects.add(homework);
-                    return objects;
-                    //  System.out.printf("Lesson{id=%d; name=%s; updateAt=%s; homework_id:%d}\n", id, name1, updateAT, homeworkId);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
-    public Lesson showLessonByID2(Integer id) {
-        try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM lesson WHERE id=?");
-            statement.setInt(1, id);
-            boolean dateReturned = statement.execute();
-            if (dateReturned) {
-                ResultSet resultSet = statement.getResultSet();
-                while (resultSet.next()) {
-                    Lesson lesson = new Lesson();
-                    lesson.setId(resultSet.getInt("id"));
-                    lesson.setName1(resultSet.getString("name1"));
-                    lesson.setUpdatedAt(resultSet.getDate("updateAT"));
-                    lesson.setHomework_id(resultSet.getInt("homework_id"));
+                    lesson.setHomework(homework);
                     return lesson;
-                    //  System.out.printf("Lesson{id=%d; name=%s; updateAt=%s; homework_id:%d}\n", id, name1, updateAT, homeworkId);
                 }
             }
         } catch (SQLException e) {
