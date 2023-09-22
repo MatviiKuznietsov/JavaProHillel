@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS `order` (
+    `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `date` DATE,
+    `cost` DOUBLE
+);
+
+CREATE TABLE IF NOT EXISTS `product` (
+    `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255),
+    `cost` DOUBLE,
+    `order_id` BIGINT,
+    FOREIGN KEY (`order_id`) REFERENCES `order`(`id`)
+);
