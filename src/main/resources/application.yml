@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:8080/OrdersDataBase
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: OrderDB
+    password: 0123456789
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+logging:
+  level:
+    org.springframework.web: INFO
